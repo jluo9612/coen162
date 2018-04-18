@@ -73,8 +73,6 @@ int main (int argc, char *argv[]) {
 		printf("Send failed...\n");
 	}
 
-	printf("asdfjlkasjdkja????\n");
-
 	if (recv(sockfd, response, sizeof(response), 0) > 0) { // keep receiving bytes?
 	   // fputs(response, stdout);
 	   printf("Response: %s\n", response);
