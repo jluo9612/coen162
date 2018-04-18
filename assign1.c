@@ -1,14 +1,3 @@
-/* Your project consists of building a tool to obtain a web object from a web server.
-
-Details: Your tool should ask the user for the URL or the server's address 
-and file path/name. 
-It then establishes a connection using sockets to the server's address
-and uses HTTP (over a TCP connection) to send a GET message requesting 
-the object using the file path/name. 
-Then, waits to receive a response from the server, which is shown on the screen. 
-You may use any computer (your laptop or a machine in the DC).
-
-*/
 
 /* Name: Jennifer Luo
    COEN 162
@@ -22,7 +11,9 @@ You may use any computer (your laptop or a machine in the DC).
 #include <unistd.h>
 
 /* Network */
+#include <sys/socket.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 #include <netinet/in.h> 
 #include <sys/socket.h>
 
@@ -38,7 +29,8 @@ int main (int argc, char *argv[]) {
 
 	struct hostent *server;
 	struct sockaddr_in serv_addr;
-	int sockfd, bytes, sent, received, total;
+	int sockfd = 0;
+	int bytes, sent, received, total;
     char response[4096];
 
     // request
@@ -64,18 +56,18 @@ int main (int argc, char *argv[]) {
 	memset(response, '0', sizeof(response));
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = 80;
-	memcpy(&serv_addr.sin_addr.s_addr,server->h_addr,server->h_length);
+	memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
 	
 	// // inet_pton converts argv[2] into sin_addr
-	// if (inet_pton(AF_INET, argv[2], &serv_addr.sin_addr) < 0) {
+	// if (inet_pton(AF_INET, server, &serv_addr.sin_addr) < 0) {
 	// 	printf("Error: inet_pton error \n");
 	// 	return 1;
-	// } else if (inet_pton(AF_INET, argv[2], &serv_addr.sin_addr) == 0) {
+	// } else if (inet_pton(AF_INET, server, &serv_addr.sin_addr) == 0) {
 	// 	printf("Usage: src string not valid \n");
 	// 	return 1;
 	// }
 
-	// connect the socket
+	// connect the socket BUG!!!!!!
 	if (connect (sockfd, (struct sockaddr *)&serv_addr, sizeof (serv_addr)) < 0)
 	{
 		printf ("Error : Connect Failed \n");
