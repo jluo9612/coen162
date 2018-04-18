@@ -57,18 +57,12 @@ int main (int argc, char *argv[]) {
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = 80;
 	memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
-	
-	// // inet_pton converts argv[2] into sin_addr
-	// if (inet_pton(AF_INET, server, &serv_addr.sin_addr) < 0) {
-	// 	printf("Error: inet_pton error \n");
-	// 	return 1;
-	// } else if (inet_pton(AF_INET, server, &serv_addr.sin_addr) == 0) {
-	// 	printf("Usage: src string not valid \n");
-	// 	return 1;
-	// }
 
+	// ------------------------------------------------------FIX----------------------------------
+
+	int nn = connect (sockfd, (struct sockaddr *)&serv_addr, sizeof (serv_addr));
 	// connect the socket BUG!!!!!!
-	if (connect (sockfd, (struct sockaddr *)&serv_addr, sizeof (serv_addr)) < 0)
+	if (nn < 0)
 	{
 		printf ("Error : Connect Failed \n");
 		return 1;
