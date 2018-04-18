@@ -31,13 +31,14 @@ int main (int argc, char *argv[]) {
 	struct sockaddr_in serv_addr;
 	int sockfd = 0;
 	int bytes, sent, received, total;
-    char response[4096];
+	char response[4096];
 
     // request
-    char req[4096];
-    sprintf(req, "GET %s HTTP/1.0\r\n\r\n", argv[2]);
+	char req[4096];
+	memset(req, '0', sizeof(req));
+	sprintf(req, "GET %s HTTP/1.0\r\n\r\n", argv[2]);
 
-    printf("Request constructed: \n%s\n", req);
+	printf("Request constructed: \n%s\n", req);
 	
 	// create the socket
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -55,14 +56,13 @@ int main (int argc, char *argv[]) {
 	memset(&serv_addr, '0', sizeof(serv_addr));
 	memset(response, '0', sizeof(response));
 	serv_addr.sin_family = AF_INET;
-	serv_addr.sin_port = 80;
+	serv_addr.sin_port = htons(80);
 	memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
 
 	// ------------------------------------------------------FIX----------------------------------
 
-	int nn = connect (sockfd, (struct sockaddr *)&serv_addr, sizeof (serv_addr));
 	// connect the socket BUG!!!!!!
-	if (nn < 0)
+	if ( connect (sockfd, (struct sockaddr *)&serv_addr, sizeof (serv_addr)) < 0 )
 	{
 		printf ("Error : Connect Failed \n");
 		return 1;
