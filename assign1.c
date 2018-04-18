@@ -26,13 +26,6 @@ You may use any computer (your laptop or a machine in the DC).
 #include <netinet/in.h> 
 #include <sys/socket.h>
 
-// GET request subroutine
-char* GET(char *path) {
-  char req[1000] = {0};
-  sprintf(req, "GET %s HTTP/1.0\r\n\r\n", path);
-  return req;
-}
-
 // main func
 int main (int argc, char *argv[]) {
 	int i;
@@ -43,15 +36,14 @@ int main (int argc, char *argv[]) {
 		return 1;
 	}
 
-	char host[1028] = strlen(argv[1])>0 ? argv[1]: "localhost";
-
 	struct hostent *server;
 	struct sockaddr_in serv_addr;
 	int sockfd, bytes, sent, received, total;
     char response[4096];
 
     // request
-    char req[4096] = GET(argv[2]);
+    char req[4096];
+    sprintf(req, "GET %s HTTP/1.0\r\n\r\n", argv[2]);
 
     printf("Request constructed: \n%s\n", req);
 	
@@ -62,7 +54,7 @@ int main (int argc, char *argv[]) {
 	}
 
 	// lookup ip addr
-	if ((server = gethostbyname(host)) == NULL) {
+	if ((server = gethostbyname(argv[1])) == NULL) {
 		printf("Error: no such host\n");
 		return 1;
 	}
@@ -90,12 +82,14 @@ int main (int argc, char *argv[]) {
 		return 1;
 	} 
 
+	printf("asdfjlkasjdkja????\n");
+
 	// Send GET request > print
 	if (send(sockfd, req, strlen(req), 0) < 0) { // keep sending bytes?
 		printf("Send failed...\n");
 	}
 
-	while (recv(sockfd, response, sizeof(response), 0) > 0) { // keep receiving bytes?
+	if (recv(sockfd, response, sizeof(response), 0) > 0) { // keep receiving bytes?
 	   // fputs(response, stdout);
 	   printf("Response: %s\n", response);
 	}
