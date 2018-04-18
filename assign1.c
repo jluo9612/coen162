@@ -68,12 +68,12 @@ int main (int argc, char *argv[]) {
 		return 1;
 	} 
 
-	printf("asdfjlkasjdkja????\n");
-
 	// Send GET request > print
 	if (send(sockfd, req, strlen(req), 0) < 0) { // keep sending bytes?
 		printf("Send failed...\n");
 	}
+
+	printf("asdfjlkasjdkja????\n");
 
 	if (recv(sockfd, response, sizeof(response), 0) > 0) { // keep receiving bytes?
 	   // fputs(response, stdout);
